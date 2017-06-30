@@ -1,5 +1,6 @@
 var express = require('express');
 //var bodyParser = require("body-parser");
+var CircularJSON = require('circular-json');
 var app = express();
 
 var resp = {
@@ -59,7 +60,7 @@ app.set('port', (process.env.PORT || 5000));
 
 app.post('/', function(req, response) {
     //response.render('pages/index');
-    var request = JSON.stringify(req);
+    var request = CircularJSON.stringify(req);
     console.log('Node app is running on port'+request);
     response.status(200).json(resp);
 
