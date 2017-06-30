@@ -3,6 +3,9 @@ var bodyParser = require("body-parser");
 //var CircularJSON = require('circular-json');
 var app = express();
 
+app.use(bodyParser.json());
+app.use(express.json());
+
 var resp = {
   "version": "1.0",
   "response": {
@@ -34,7 +37,6 @@ var resp = {
     "requireLastIntent": false
   }
 };
-app.use(bodyParser.json());
 
  // var server = app.listen(process.env.PORT || 5000, function () {
  //    var port = server.address().port;
@@ -61,7 +63,7 @@ app.set('port', (process.env.PORT || 5000));
 app.post('/', function(req, response) {
     //response.render('pages/index');
     //var request = CircularJSON.stringify(req);
-    console.log('Node app is running on port'+req.request);
+    console.log('Node app is running on port'+req.request.intent.name);
     response.status(200).json(resp);
 
     //response.writeHead("200, {'Content-Type': 'text/html'}");
