@@ -1,6 +1,6 @@
 var express = require('express');
 var bodyParser = require("body-parser");
-//var CircularJSON = require('circular-json');
+var CircularJSON = require('circular-json');
 var app = express();
 
 app.use(bodyParser.json());
@@ -62,8 +62,8 @@ app.set('port', (process.env.PORT || 5000));
 
 app.post('/', function(req, response) {
     //response.render('pages/index');
-    //var request = CircularJSON.stringify(req);
-    console.log('Client Request=====>'+req.version);
+    var request = CircularJSON.stringify(req);
+    console.log('Client Request=====>'+request);
     response.status(200).json(resp);
 
     //response.writeHead("200, {'Content-Type': 'text/html'}");
