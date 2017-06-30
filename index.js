@@ -18,8 +18,8 @@ app.set('port', (process.env.PORT || 5000));
 
 app.get('/', function(request, response) {
     //response.render('pages/sample');
+    console.log('Node app is running on port');
     response.status(200).json(JSON.stringify({'message':'Hello Test'}));
-    //console.log('Node app is running on port', app.get('port'));
 
     //response.writeHead("200, {'Content-Type': 'text/html'}");
     //response.send(JSON.stringify(resp));
