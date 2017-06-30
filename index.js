@@ -7,7 +7,7 @@ var resp = {
   "response": {
     "outputSpeech": {
       "type": "SSML",
-      "ssml": "<speak><p>John, welcome back to HealthActivate, You have a medication reminder, <break strength='none' time='1s'/> at 08:20 AM you are scheduled to take your ACE medication.<break strength='none' time='750ms'/> How may I help you? </p></speak>"
+      "ssml": "<speak><p>Nagaraju, welcome back to HealthActivate, You have a medication reminder, <break strength='none' time='1s'/> at 08:20 AM you are scheduled to take your ACE medication.<break strength='none' time='750ms'/> How may I help you? </p></speak>"
     },
     "reprompt": {
       "outputSpeech": {
@@ -17,7 +17,7 @@ var resp = {
     },
     "speechletResponse": {
       "outputSpeech": {
-        "ssml": "<speak><p>John, welcome back to HealthActivate, You have a medication reminder, <break strength='none' time='1s'/> at 08:20 AM you are scheduled to take your ACE medication.<break strength='none' time='750ms'/> How may I help you? </p></speak>"
+        "ssml": "<speak><p>Nagaraju, welcome back to HealthActivate, You have a medication reminder, <break strength='none' time='1s'/> at 08:20 AM you are scheduled to take your ACE medication.<break strength='none' time='750ms'/> How may I help you? </p></speak>"
       },
       "reprompt": {
         "outputSpeech": {
@@ -28,7 +28,7 @@ var resp = {
     }
   },
   "sessionAttributes": {
-    "SayMsgData": "<p>John, welcome back to HealthActivate, You have a medication reminder, <break strength='none' time='1s'/> at 08:20 AM you are scheduled to take your ACE medication.<break strength='none' time='750ms'/>  How may I help you? </p>",
+    "SayMsgData": "<p>Nagaraju, welcome back to HealthActivate, You have a medication reminder, <break strength='none' time='1s'/> at 08:20 AM you are scheduled to take your ACE medication.<break strength='none' time='750ms'/>  How may I help you? </p>",
     "rePromtData": "<p>You can say, what are my goals for today, what is my medication schedule, or message my health coach.</p>",
     "requireLastIntent": false
   }
