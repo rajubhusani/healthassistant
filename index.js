@@ -8,7 +8,7 @@ app.use(bodyParser.json());
     console.log("App now running on port", port);
   });
 
-//app.set('port', (process.env.PORT || 5000));
+app.set('port', (process.env.PORT || 5000));
 
 //app.use(express.static(__dirname + '/public'));
 
