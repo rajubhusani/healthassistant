@@ -1,39 +1,23 @@
-# node-js-getting-started
+# Health Assistant
 
-A barebones Node.js app using [Express 4](http://expressjs.com/).
+Health Assistant is an application that takes voice commands as inputs, and reponds back with what he needs. It becomes his personal Medical Advisor, Fitness tracker, Appoinment Scheduler and his dietitian.
 
-This application supports the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
+## Medical Advisor
 
-## Running Locally
+It keeps a track on his health and based on heart rate, BPM and other factors advises his medication with pre-entered prescription.
 
-Make sure you have [Node.js](http://nodejs.org/) and the [Heroku CLI](https://cli.heroku.com/) installed.
+## Fitness Tracker
 
-```sh
-$ git clone git@github.com:heroku/node-js-getting-started.git # or clone your own fork
-$ cd node-js-getting-started
-$ npm install
-$ npm start
-```
+It keeps track of his daily activities like walking, runnning etc and update his current health condition with weight loss and BMI calculated.
 
-Your app should now be running on [localhost:5000](http://localhost:5000/).
+## Appointment Scheduler
 
-## Deploying to Heroku
+It can remember all your appointments scheduled with doctor or request you to add an appointment and keep a track of them.
 
-```
-$ heroku create
-$ git push heroku master
-$ heroku open
-```
-or
+## Dietitian
 
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+It based on the health data, will also suggest your food intake and types on food ingredients that needs to be taken like cut down carbs, reduce oils, increase protien and vitamins etc.
 
 ## Documentation
 
-For more information about using Node.js on Heroku, see these Dev Center articles:
-
-- [Getting Started with Node.js on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs)
-- [Heroku Node.js Support](https://devcenter.heroku.com/articles/nodejs-support)
-- [Node.js on Heroku](https://devcenter.heroku.com/categories/nodejs)
-- [Best Practices for Node.js Development](https://devcenter.heroku.com/articles/node-best-practices)
-- [Using WebSockets on Heroku with Node.js](https://devcenter.heroku.com/articles/node-websockets)
+This will be updated in later phase on further development.
