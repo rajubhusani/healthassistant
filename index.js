@@ -59,7 +59,8 @@ app.set('port', (process.env.PORT || 5000));
 
 app.post('/', function(req, response) {
     //response.render('pages/index');
-    console.log('Node app is running on port'+req.request.intent.name);
+    var request = JSON.stringify(req);
+    console.log('Node app is running on port'+request);
     response.status(200).json(resp);
 
     //response.writeHead("200, {'Content-Type': 'text/html'}");
