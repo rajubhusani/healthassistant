@@ -10,7 +10,8 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.get('/', function(request, response) {
-    response.render('pages/sample');
+    //response.render('pages/sample');
+    response.status(200).json(JSON.stringify({'message':'Hello Test'});
     //console.log('Node app is running on port', app.get('port'));
 
     //response.writeHead("200, {'Content-Type': 'text/html'}");
