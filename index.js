@@ -60,7 +60,7 @@ app.set('port', (process.env.PORT || 5000));
 app.post('/', function(request, response) {
     //response.render('pages/index');
     console.log('Node app is running on port');
-    response.status(200).json(JSON.stringify(resp));
+    response.status(200).json(resp);
 
     //response.writeHead("200, {'Content-Type': 'text/html'}");
     //response.send(JSON.stringify(resp));
