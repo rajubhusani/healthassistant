@@ -16,7 +16,16 @@ app.set('port', (process.env.PORT || 5000));
 //app.set('views', __dirname + '/views');
 //app.set('view engine', 'ejs');
 
-app.get('/', function(request, response) {
+// app.get('/', function(request, response) {
+//     //response.render('pages/index');
+//     console.log('Node app is running on port');
+//     response.status(200).json(JSON.stringify({'message':'Hello Test'}));
+
+//     //response.writeHead("200, {'Content-Type': 'text/html'}");
+//     //response.send(JSON.stringify(resp));
+// });
+
+app.post('/', function(request, response) {
     //response.render('pages/index');
     console.log('Node app is running on port');
     response.status(200).json(JSON.stringify({'message':'Hello Test'}));
