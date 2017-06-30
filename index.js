@@ -3,14 +3,14 @@ var bodyParser = require("body-parser");
 var app = express();
 app.use(bodyParser.json());
 
- var server = app.listen(process.env.PORT || 5000, function () {
-    var port = server.address().port;
-    console.log("App now running on port", port);
-  });
+ // var server = app.listen(process.env.PORT || 5000, function () {
+ //    var port = server.address().port;
+ //    console.log("App now running on port", port);
+ //  });
 
 app.set('port', (process.env.PORT || 5000));
 
-//app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public'));
 
 // views is directory for all template files
 //app.set('views', __dirname + '/views');
