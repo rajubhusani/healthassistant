@@ -1,10 +1,23 @@
-var express = require('express');
-var bodyParser = require("body-parser");
-var CircularJSON = require('circular-json');
-var app = express();
 
+var express = require("express");
+var CircularJSON = require("circular-json");
+
+var app = express();
+var bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-//app.use(express.json());
+app.set('port', (process.env.PORT || 5000));
+
+//Establishing connection to mongo db
+var mongoose = require('mongoose');
+mongoose.Promise = require("bluebird");
+mongoose.connect('mongodb://adityakotamraju:Aditya6@ds145952.mlab.com:45952/health_assistant').then((db) => {
+  console.log('Mongo Connected to health_assistant DB..!');
+  db.close();
+}).catch(err => {
+    console.error('Mongo Connection failed: ', err.stack);
+    process.exit(1);
+});
 
 var resp = {
   "version": "1.0",
@@ -38,13 +51,6 @@ var resp = {
   }
 };
 
- // var server = app.listen(process.env.PORT || 5000, function () {
- //    var port = server.address().port;
- //    console.log("App now running on port", port);
- //  });
-
-app.set('port', (process.env.PORT || 5000));
-
 //app.use(express.static(__dirname + '/public'));
 
 // views is directory for all template files
@@ -52,12 +58,9 @@ app.set('port', (process.env.PORT || 5000));
 //app.set('view engine', 'ejs');
 
 // app.get('/', function(request, response) {
-//     //response.render('pages/index');
+//     response.render('pages/index');
 //     console.log('Node app is running on port');
 //     response.status(200).json(JSON.stringify({'message':'Hello Test'}));
-
-//     //response.writeHead("200, {'Content-Type': 'text/html'}");
-//     //response.send(JSON.stringify(resp));
 // });
 
 app.post('/', function(req, response) {
@@ -65,9 +68,6 @@ app.post('/', function(req, response) {
     //var request = CircularJSON.stringify(req);
     console.log('Client Request=====>'+req.body.request.intent.name);
     response.status(200).json(resp);
-
-    //response.writeHead("200, {'Content-Type': 'text/html'}");
-    //response.send(JSON.stringify(resp));
 });
 
 app.listen(app.get('port'), function() {
