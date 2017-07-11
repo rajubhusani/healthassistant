@@ -1,21 +1,21 @@
-
 var express = require("express");
 var CircularJSON = require("circular-json");
 
 var app = express();
 var bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({extended: true}));
+// app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.set('port', (process.env.PORT || 5000));
 
 //Establishing connection to mongo db
-var mongoose = require('mongoose');
-mongoose.Promise = require("bluebird");
-mongoose.connect('mongodb://adityakotamraju:Aditya6@ds145952.mlab.com:45952/health_assistant').then((db) => {
-  console.log('Mongo Connected to health_assistant DB..!');
+var MongoClient = require('mongodb').MongoClient;
+//var mongoose = require('mongoose');
+//mongoose.Promise = require("bluebird");
+MongoClient.connect('mongodb://adityakotamraju:Health123@ds151752.mlab.com:51752/health_assistant').then((db) => {
+  console.log('Mongo Connected to health_assistant DB..! ', db);
   db.close();
-}).catch(err => {
-    console.error('Mongo Connection failed: ', err.stack);
+}).catch((err) => {
+    console.error('Mongo Connection failed: ', err);
     process.exit(1);
 });
 
