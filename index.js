@@ -4,17 +4,7 @@ var CircularJSON = require("circular-json");
 var app = express();
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
-app.set('port', (process.env.PORT || 5000));
-
-//Establishing connection to mongo db
-var MongoClient = require('mongodb').MongoClient;
-MongoClient.connect('mongodb://adityakotamraju:Health123@ds151752.mlab.com:51752/health_assistant').then((db) => {
-    console.log('Mongo Connected to health_assistant DB..! ', db);
-    db.close();
-}).catch((err) => {
-    console.error('Mongo Connection failed: ', err);
-    process.exit(1);
-});
+app.set('port', (process.env.PORT || 5021));
 
 var resp = {
     "version": "1.0",
@@ -66,6 +56,27 @@ app.post('/', function(req, response) {
     console.log('Client Request=====>' + req.body);
     //console.log('Client Request=====>' + req.body.request.intent.name);
     response.status(200).json(resp);
+});
+
+app.post('/app/login', function(req, response) {
+
+    var MongoClient = require('mongodb').MongoClient;
+    var query = { email: req.body.username };
+    MongoClient.connect('mongodb://adityakotamraju:Health123@ds151752.mlab.com:51752/health_assistant').then((db) => {
+        db.collection("Users").find(query).toArray(function(err, resp) {
+            if (err) {
+                var error = {
+                    "message": "Error in connection"
+                };
+                response.status(100).json(error);
+            } else {
+                response.status(200).json(resp);
+            }
+        });
+    }).catch((err) => {
+        console.error('Mongo Connection failed: ', err);
+        return null;
+    });
 });
 
 app.listen(app.get('port'), function() {
