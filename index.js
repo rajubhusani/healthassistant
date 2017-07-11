@@ -64,6 +64,7 @@ app.post('/app/login', function(req, response) {
     var query = { email: req.body.username };
     MongoClient.connect('mongodb://adityakotamraju:Health123@ds151752.mlab.com:51752/health_assistant').then((db) => {
         db.collection("Users").find(query).toArray(function(err, resp) {
+            console.log('Response: ', resp);
             if (err) {
                 var error = {
                     "message": "Error in connection"
