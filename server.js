@@ -61,7 +61,7 @@ app.post("/app/login", function(req, res) {
             if (docs.length > 0) {
                 res.status(200).json(docs);
             } else {
-                handleError(res, "", "Invalid username and password");
+                handleError(res, "", "Invalid username and password", 100);
             }
         }
     });
