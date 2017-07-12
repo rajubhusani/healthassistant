@@ -33,7 +33,7 @@ mongodb.MongoClient.connect(MONGO_CONNECTION_URL, function(err, database) {
 // Generic error handler used by all endpoints.
 function handleError(res, reason, message, code) {
     console.log("ERROR: " + reason);
-    res.status(code).json({ "error": message });
+    res.status(code || 100).json({ "error": message });
 }
 
 /*  "/app/login"
@@ -56,12 +56,12 @@ app.post("/app/login", function(req, res) {
         ]
     }).toArray(function(err, docs) {
         if (err) {
-            handleError(res, err.message, "Invalid username and password", 100);
+            handleError(res, err.message, "Invalid username and password");
         } else {
             if (docs.length > 0) {
                 res.status(200).json(docs);
             } else {
-                handleError(res, "", "Invalid username and password", 100);
+                handleError(res, "", "Invalid username and password");
             }
         }
     });
@@ -73,7 +73,7 @@ app.post("/app/schedule", function(req, res) {
 
     db.collection(COLLECTION.REMINDERS).insertOne(newSchedule, function(err, doc) {
         if (err) {
-            handleError(res, err.message, "Failed to schedule a reminder.", 100);
+            handleError(res, err.message, "Failed to schedule a reminder.");
         } else {
             res.status(201).json(doc.ops[0]);
         }
