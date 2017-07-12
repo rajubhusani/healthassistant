@@ -12,6 +12,10 @@ var app = express();
 app.use(bodyParser.json());
 app.set('port', (process.env.PORT || 5000));
 
+app.set('views', __dirname + '/views');
+app.engine('html', require('ejs').renderFile);
+// app.set('view engine', 'ejs');
+
 var db;
 var alexa = require("./alexa/alexa_response");
 
@@ -31,6 +35,14 @@ function handleError(res, reason, message, code) {
   console.log("ERROR: " + reason);
   res.status(code || 500).json({"error": message});
 }
+
+/*  "/app/login"
+ *    POST: Authenticates the user with the app
+ */
+
+app.get("/", function(req, res) {
+    res.render("pages/sample.ejs");
+});
 
 /*  "/app/login"
  *    POST: Authenticates the user with the app
