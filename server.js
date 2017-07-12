@@ -56,7 +56,7 @@ app.post("/app/login", function(req, res) {
         ]
     }).toArray(function(err, docs) {
         if (err) {
-            handleError(res, err.message, "Invalid username and password");
+            handleError(res, err.message, "Invalid username and password", 100);
         } else {
             if (docs.length > 0) {
                 res.status(200).json(docs);
@@ -71,13 +71,9 @@ app.post("/app/schedule", function(req, res) {
 
     var newSchedule = req.body;
 
-    if (!req.body.type) {
-        handleError(res, "Invalid user input", "Must provide the type of reminder", 400);
-    }
-
     db.collection(COLLECTION.REMINDERS).insertOne(newSchedule, function(err, doc) {
         if (err) {
-            handleError(res, err.message, "Failed to schedule a reminder.");
+            handleError(res, err.message, "Failed to schedule a reminder.", 100);
         } else {
             res.status(201).json(doc.ops[0]);
         }
