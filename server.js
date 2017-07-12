@@ -33,7 +33,7 @@ mongodb.MongoClient.connect(MONGO_CONNECTION_URL, function(err, database) {
 // Generic error handler used by all endpoints.
 function handleError(res, reason, message, code) {
     console.log("ERROR: " + reason);
-    res.status(code || 100).json({ "error": message });
+    res.status(code || 500).json({ "error": message });
 }
 
 /*  "/app/login"
@@ -61,7 +61,7 @@ app.post("/app/login", function(req, res) {
             if (docs.length > 0) {
                 res.status(200).json(docs);
             } else {
-                handleError(res, "", "Invalid username and password");
+                res.status(100).json({ "error": "Invalid username and password" });
             }
         }
     });
