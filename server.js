@@ -87,7 +87,7 @@ app.post("/app/schedule", function(req, res) {
 
 app.post("/alexa", function(req, res) {
     console.log('Received request from alexa..!');
-    if (req.body.request.type === "LaunchIntent") {
+    if (req.body.request.type === "LaunchRequest") {
         var resp = alexa.sayHello();
         res.status(200).json(resp);
     }
