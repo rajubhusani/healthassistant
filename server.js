@@ -5,7 +5,6 @@ var mongodb = require("mongodb");
 var MONGO_CONNECTION_URL = 'mongodb://adityakotamraju:Health123@ds151752.mlab.com:51752/health_assistant';
 var COLLECTION = {
     "USERS": "Users",
-    "REMINDERS": "Reminders"
 };
 
 var app = express();
@@ -33,7 +32,7 @@ mongodb.MongoClient.connect(MONGO_CONNECTION_URL, function(err, database) {
 // Generic error handler used by all endpoints.
 function handleError(res, reason, message, code) {
     console.log("ERROR: " + reason);
-    res.status(code || 500).json({ "error": message });
+    res.status(code || 200).json({ "error": message });
 }
 
 /*  "/app/login"
@@ -61,24 +60,28 @@ app.post("/app/login", function(req, res) {
             if (docs.length > 0) {
                 res.status(200).json(docs);
             } else {
-                res.status(100).json({ "error": "Invalid username and password" });
+                handleError(res, "Username password match not found", "Invalid username and password");
             }
         }
     });
 });
 
-app.post("/app/schedule", function(req, res) {
+app.post("/app/scheduleTask", function(req, res) {
 
-    var newSchedule = req.body;
+    var newTask = req.body;
+    var moment = require("moment");
+    console.log('Schedule Request Recevied: ', newTask);
 
-    db.collection(COLLECTION.REMINDERS).insertOne(newSchedule, function(err, doc) {
-        if (err) {
-            handleError(res, err.message, "Failed to schedule a reminder.");
-        } else {
-            res.status(201).json(doc.ops[0]);
-        }
-    });
-
+    var taskDate =  moment(newTask.dateTime,"x").format("DD MMM YYYY hh:mm a");
+    db.collection(COLLECTION.USERS).findOneAndUpdate(
+        {_id: newTask._id},
+        {$addToSet: {"tasks": {"tasktype": newTask.taskType, "date": taskDate } }}
+    ).then((resp) => {
+            console.log('Task Successfully inserted');
+            res.status(200).json({ "success": "Task scheduled successfully" });
+        }, (er) => {
+            handleError(res, er.message, "Schduling task failed, please try again after sometime");
+        });
 });
 
 app.post("/alexa", function(req, res) {
