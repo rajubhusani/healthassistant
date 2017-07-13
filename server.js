@@ -13,7 +13,6 @@ app.set('port', (process.env.PORT || 5000));
 
 app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
-// app.set('view engine', 'ejs');
 
 var db;
 var alexa = require("./alexa/alexa_response");
@@ -66,22 +65,28 @@ app.post("/app/login", function(req, res) {
     });
 });
 
+/*  "/app/scheduleTask"
+ *    POST: Schedules tasks for each user
+ */
 app.post("/app/scheduleTask", function(req, res) {
 
     var newTask = req.body;
     var moment = require("moment");
-    console.log('Schedule Request Recevied: ', newTask);
-
-    var taskDate =  moment(newTask.dateTime,"x").format("DD MMM YYYY hh:mm a");
-    db.collection(COLLECTION.USERS).findOneAndUpdate(
-        {_id: newTask._id},
-        {$addToSet: {"tasks": {"tasktype": newTask.taskType, "date": taskDate } }}
-    ).then((resp) => {
-            console.log('Task Successfully inserted');
-            res.status(200).json({ "success": "Task scheduled successfully" });
-        }, (er) => {
-            handleError(res, er.message, "Schduling task failed, please try again after sometime");
-        });
+    var taskDate = moment(newTask.dateTime, "x").format("DD MMM YYYY hh:mm a");
+    db.collection(COLLECTION.USERS).findOneAndUpdate({ _id: newTask._id }, {
+        $addToSet: {
+            "tasks": {
+                "tasktype": newTask.taskType,
+                "taskDesc": newTask.taskDesc,
+                "date": taskDate
+            }
+        }
+    }).then((resp) => {
+        console.log('Task Successfully inserted');
+        res.status(200).json({ "success": "Task scheduled successfully" });
+    }, (er) => {
+        handleError(res, er.message, "Schduling task failed, please try again after sometime");
+    });
 });
 
 app.post("/alexa", function(req, res) {
