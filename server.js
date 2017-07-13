@@ -95,6 +95,10 @@ app.post("/alexa", function(req, res) {
     if (req.body.request.type === "LaunchRequest") {
         var resp = alexa.sayHello();
         res.status(200).json(resp);
+    } else if (req.body.request.type === "IntentRequest") {
+        if (req.body.request.intent.name === "GetTasks") {
+
+        }
     }
 });
 
