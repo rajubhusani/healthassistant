@@ -93,10 +93,16 @@ app.post("/app/scheduleTask", function(req, res) {
 app.post("/alexa", function(req, res) {
     console.log('Received request from alexa..!');
     if (req.body.request.type === "LaunchRequest") {
-        var resp = alexa.sayHello();
+        var resp = alexa.sayHello('Aditya');
         res.status(200).json(resp);
     } else if (req.body.request.type === "IntentRequest") {
-        if (req.body.request.intent.name === "GetTasks") {
+        var intentName = req.body.request.intent.name;
+        switch (intentName) {
+            case "SayHello":
+                var resp = alexa.sayHello();
+                res.status(200).json(resp);
+                break;
+            case "GetTasks":
 
         }
     }

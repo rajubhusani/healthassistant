@@ -1,13 +1,14 @@
 var alexa = module.exports = {};
+var format = require('string-format');
 
-alexa.sayHello = function() {
+alexa.sayHello = function(username) {
 
     var resp = {
         "version": "1.0",
         "response": {
             "outputSpeech": {
                 "type": "SSML",
-                "ssml": "<speak><p>Nagaraju, welcome back to HealthActivate, You have a medication reminder, <break strength='none' time='1s'/> at 08:20 AM you are scheduled to take your ACE medication.<break strength='none' time='750ms'/> How may I help you? </p></speak>"
+                "ssml": format("<speak><p>{}, welcome back to HealthActivate, You have a medication reminder, <break strength='none' time='1s'/> at 08:20 AM you are scheduled to take your ACE medication.<break strength='none' time='750ms'/> How may I help you? </p></speak>", username)
             },
             "reprompt": {
                 "outputSpeech": {
