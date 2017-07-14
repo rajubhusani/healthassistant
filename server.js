@@ -99,11 +99,13 @@ app.post("/alexa", function(req, res) {
         var intentName = req.body.request.intent.name;
         switch (intentName) {
             case "SayHello":
-                var resp = alexa.sayHello();
+                var resp = alexa.sayHello('Aditya');
                 res.status(200).json(resp);
                 break;
-            case "GetTasks":
-
+            case "AMAZON.CancelIntent":
+                var resp = alexa.sayGoodBye();
+                res.status(200).json(resp);
+                break;
         }
     }
 });
