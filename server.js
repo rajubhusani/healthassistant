@@ -74,7 +74,7 @@ app.post("/app/scheduleTask", function(req, res) {
     var moment = require("moment");
     var taskDate = moment(newTask.dateTime, "x").format("DD MMM YYYY hh:mm a");
     console.log('Task Received: ', newTask);
-    db.collection(COLLECTION.USERS).findOneAndUpdate({ _id: newTask._id }, {
+    db.collection(COLLECTION.USERS).findAndUpdate({ _id: newTask._id }, {
         $addToSet: {
             "tasks": {
                 "tasktype": newTask.taskType,
