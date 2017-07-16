@@ -106,6 +106,8 @@ app.post("/alexa", function(req, res) {
                 var resp = alexa.sayGoodBye();
                 res.status(200).json(resp);
                 break;
+            case "GetTasks":
+                var date = "";
         }
     }
 });

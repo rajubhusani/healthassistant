@@ -76,7 +76,7 @@ alexa.sayGoodBye = function() {
         "response": {
             "outputSpeech": {
                 "type": "SSML",
-                "ssml": format("<speak><p>{}, welcome back to HealthActivate, You have a medication reminder, <break strength='none' time='1s'/> at 08:20 AM you are scheduled to take your ACE medication.<break strength='none' time='750ms'/> How may I help you? </p></speak>", username)
+                "ssml": format("<speak><p>Goodbye {},</p></speak>", username)
             },
             "reprompt": {
                 "outputSpeech": {
@@ -93,7 +93,7 @@ alexa.sayGoodBye = function() {
                         "ssml": "<speak><p>You can say, what are my goals for today, what is my medication schedule, or message my health coach.</p></speak>"
                     }
                 },
-                "shouldEndSession": false
+                "shouldEndSession": true
             }
         },
         "sessionAttributes": {
@@ -104,3 +104,4 @@ alexa.sayGoodBye = function() {
     };
     return resp;
 };
+

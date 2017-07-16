@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Health Assistant is an application that takes voice commands as inputs, and reponds back with what he needs. It becomes his personal Medical Advisor, Fitness tracker, Appoinment Scheduler and his dietitian.",
   "main": "server.js",
+  "engines": {
+    "node": "6.11.1"
+  },
   "dependencies": {
     "body-parser": "^1.17.2",
     "circular-json": "^0.3.1",
