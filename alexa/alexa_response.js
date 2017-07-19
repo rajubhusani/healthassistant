@@ -106,7 +106,7 @@ alexa.sayGoodBye = function() {
 };
 
 alexa.sayTasks = function(taskResponse) {
-    console.log('Task Received to Alexa: ', taskResponse);
+    console.log('Task Received to Alexa: ', JSON.stringify(taskResponse));
 
     /*var resp = {
         "version": "1.0",
