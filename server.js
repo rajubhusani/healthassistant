@@ -69,6 +69,7 @@ app.post("/app/login", function(req, res) {
 /*  "/app/scheduleTask"
  *    POST: Schedules tasks for each user
  */
+
 app.post("/app/scheduleTask", function(req, res) {
 
     var newTask = req.body;
@@ -108,7 +109,29 @@ app.post("/alexa", function(req, res) {
                 res.status(200).json(resp);
                 break;
             case "GetTasks":
-                var date = "";
+                var date = "19 Jul 2017 01:35 pm";
+                var id = "1002";
+                db.collection(COLLECTION.USERS).find({
+                    $and: [
+                        { "_id": id },
+                        { "date": date }
+                    ]
+                }).toArray(function(err, docs) {
+                    if (err) {
+                        handleError(res, err.message, "Error in finding tasks for the user");
+                    } else {
+                        var resp = alexa.sayTasks(docs);
+                        res.status(200).json(resp);
+                        /*if (docs.length > 0) {
+                            var resp = alexa.sayTasks(docs);
+                            res.status(200).json(resp);
+                        } else {
+                            handleError(res, "No tasks scheduled yet");
+                        }*/
+                    }
+                });
+
+                break;
         }
     }
 });
