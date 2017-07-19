@@ -57,6 +57,7 @@ app.post("/app/login", function(req, res) {
             handleError(res, err.message, "Invalid username and password");
         } else {
             if (docs.length > 0) {
+                delete docs[0].password;
                 res.status(200).json(docs);
             } else {
                 handleError(res, "Username password match not found", "Invalid username and password");
@@ -74,7 +75,7 @@ app.post("/app/scheduleTask", function(req, res) {
     var moment = require("moment");
     var taskDate = moment(newTask.dateTime, "x").format("DD MMM YYYY hh:mm a");
     console.log('Task Received: ', newTask);
-    db.collection(COLLECTION.USERS).findAndUpdate({ _id: newTask._id }, {
+    db.collection(COLLECTION.USERS).findOneAndUpdate({ "_id": newTask._id }, {
         $addToSet: {
             "tasks": {
                 "tasktype": newTask.taskType,
