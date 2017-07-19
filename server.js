@@ -114,7 +114,7 @@ app.post("/alexa", function(req, res) {
                 db.collection(COLLECTION.USERS).find({
                     $and: [
                         { "_id": id },
-                        { $elemMatch: { "tasks.date": date } }
+                        { "tasks.date": { $eq: date } }
                     ]
                 }).toArray(function(err, docs) {
                     if (err) {
