@@ -114,12 +114,13 @@ app.post("/alexa", function(req, res) {
                 db.collection(COLLECTION.USERS).find({
                     $and: [
                         { "_id": id },
-                        { "tasks.date": { $eq: date } }
+                        { "tasks": { $elemMatch: { "date": date } } }
                     ]
                 }).toArray(function(err, docs) {
                     if (err) {
                         handleError(res, err.message, "Error in finding tasks for the user");
                     } else {
+                        $elemMatch: { docs }
                         var resp = alexa.sayTasks(docs);
                         res.status(200).json(resp);
                         /*if (docs.length > 0) {
