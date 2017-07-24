@@ -191,7 +191,7 @@ app.post("/alexa", function(req, res) {
                             "type": slotName,
                             "date": date
                         }
-                    }]
+                    }, { "healthdata.$": 1 }]
                 }).toArray(function(err, docs) {
                     if (err) {
                         handleError(res, err.message, "You don't have data for " + slotName);
