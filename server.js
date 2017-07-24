@@ -106,14 +106,15 @@ app.post("/app/LogHealthData", function(req, res) {
     var newTask = req.body;
     var moment = require("moment");
     var type = newTask.type;
-    var taskDate = moment(newTask.dateTime, "x").format("DD MMM YYYY hh:mm a");
+    var taskDate = moment(newTask.dateTime, "x").format("YYYY-mm-dd");
     console.log('Task Received: ', newTask);
     db.collection(COLLECTION.USERS).findOneAndUpdate({
         "_id": newTask._id
     }, {
         $addToSet: {
-            type: {
+            "healthdata": {
                 "taskDesc": newTask.value,
+                "type": newTask.type,
                 "date": taskDate
             }
         }
@@ -217,7 +218,8 @@ app.post("/alexa", function(req, res) {
                     "_id": id
                 }, {
                     $addToSet: {
-                        slotName: {
+                        "healthdata": {
+                            "type": slotName,
                             "value": newTask.taskType,
                             "date": date
                         }
