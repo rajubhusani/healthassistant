@@ -185,13 +185,12 @@ app.post("/alexa", function(req, res) {
                 var slotName = req.body.request.intent.slots.measurementType.value; //steps
                 console.log("Slot:" + slotName + " Date:" + date);
                 db.collection(COLLECTION.USERS).find({
-                    "_id": id
+                    "_id": id,
+                    "healthdata.type": slotName,
+                    "healthdata.date": date
                 }, {
-                    "healthdata": {
-                        "type": slotName,
-                        "date": date
-                    }
-                }, { "healthdata.$": 1 }).toArray(function(err, docs) {
+                    "healthdata.$": 1
+                }).toArray(function(err, docs) {
                     if (err) {
                         handleError(res, err.message, "You don't have data for " + slotName);
                     } else {
