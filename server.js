@@ -185,7 +185,8 @@ app.post("/alexa", function(req, res) {
                 var slotName = req.body.request.intent.slots.measurementType.value; //steps
                 console.log("Slot:" + slotName + " Date:" + date);
                 db.collection(COLLECTION.USERS).find({
-                    "_id": id,
+                    "_id": id
+                }, {
                     "healthdata": {
                         "type": slotName,
                         "date": date
