@@ -142,3 +142,7 @@ alexa.sayTasks = function(taskResponse) {
 
     return resp;*/
 };
+
+alexa.readData = function(taskResponse) {
+    console.log('Data Send to Alexa: ', JSON.stringify(taskResponse));
+};
