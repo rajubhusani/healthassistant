@@ -182,6 +182,7 @@ app.post("/alexa", function(req, res) {
                 var date = req.body.request.intent.slots.day.value; //2017-07-24
                 var id = "1002";
                 var slotName = req.body.request.intent.slots.measurementType.value; //steps
+                console.log("Slot:" + slotName + " Date:" + date);
                 db.collection(COLLECTION.USERS).find({
                     $and: [{
                             "_id": id
