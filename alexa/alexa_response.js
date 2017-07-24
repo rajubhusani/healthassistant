@@ -143,6 +143,44 @@ alexa.sayTasks = function(taskResponse) {
     return resp;*/
 };
 
-alexa.readData = function(taskResponse) {
+alexa.readData = function(taskResponse, measurement) {
     console.log('Data Send to Alexa: ', JSON.stringify(taskResponse));
+    var response = JSON.stringify(taskResponse);
+    var alexaText = "<speak><p>You have not captured your readings.. <break strength='none' time='750ms'/> Is there anything else I can help with? </p></speak>";
+    if (!taskResponse || taskResponse.length !== 0) {
+        alexaText = "<speak><p>Your " + measurement + " value is " + response.healthdata[0].value + "<break strength='none' time='750ms'/> Is there anything else I can help with? </p></speak>";
+    }
+    var resp = {
+        "version": "1.0",
+        "response": {
+            "outputSpeech": {
+                "type": "SSML",
+                "ssml": alexaText
+            },
+            "reprompt": {
+                "outputSpeech": {
+                    "type": "SSML",
+                    "ssml": "<speak><p>You can say, what are my goals for today, what is my medication schedule, or message my health coach.</p></speak>"
+                }
+            },
+            "speechletResponse": {
+                "outputSpeech": {
+                    "ssml": "<speak><p>Nagaraju, welcome back to HealthActivate, You have a medication reminder, <break strength='none' time='1s'/> at 08:20 AM you are scheduled to take your ACE medication.<break strength='none' time='750ms'/> How may I help you? </p></speak>"
+                },
+                "reprompt": {
+                    "outputSpeech": {
+                        "ssml": "<speak><p>You can say, what are my goals for today, what is my medication schedule, or message my health coach.</p></speak>"
+                    }
+                },
+                "shouldEndSession": false
+            }
+        },
+        "sessionAttributes": {
+            "SayMsgData": "<p>Nagaraju, welcome back to HealthActivate, You have a medication reminder, <break strength='none' time='1s'/> at 08:20 AM you are scheduled to take your ACE medication.<break strength='none' time='750ms'/>  How may I help you? </p>",
+            "rePromtData": "<p>You can say, what are my goals for today, what is my medication schedule, or message my health coach.</p>",
+            "requireLastIntent": false
+        }
+    };
+
+    return resp;
 };

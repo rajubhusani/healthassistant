@@ -203,7 +203,7 @@ app.post("/alexa", function(req, res) {
                         $elemMatch: {
                             docs
                         }
-                        var resp = alexa.readData(docs);
+                        var resp = alexa.readData(docs, slotName);
                         res.status(200).json(resp);
                     }
                 });
