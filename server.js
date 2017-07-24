@@ -9,7 +9,7 @@ var COLLECTION = {
 
 var app = express();
 app.use(bodyParser.json());
-app.set('port', (process.env.PORT || 5000));
+app.set('port', (process.env.PORT || 5002));
 
 app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
@@ -106,15 +106,15 @@ app.post("/app/LogHealthData", function(req, res) {
     var newTask = req.body;
     var moment = require("moment");
     var type = newTask.type;
-    var taskDate = moment(newTask.dateTime, "x").format("YYYY-mm-dd");
+    var taskDate = moment(newTask.dateTime, "x").format("YYYY-MM-DD");
     console.log('Task Received: ', newTask);
     db.collection(COLLECTION.USERS).findOneAndUpdate({
         "_id": newTask._id
     }, {
         $addToSet: {
             "healthdata": {
-                "taskDesc": newTask.value,
-                "type": newTask.type,
+                "value": newTask.value,
+                "type": type,
                 "date": taskDate
             }
         }
