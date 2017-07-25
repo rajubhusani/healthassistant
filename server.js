@@ -1,6 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var mongodb = require("mongodb");
+var CircularJSON = require("circular-json");
 
 var MONGO_CONNECTION_URL = 'mongodb://adityakotamraju:Health123@ds151752.mlab.com:51752/health_assistant';
 var COLLECTION = {
@@ -128,7 +129,7 @@ app.post("/app/LogHealthData", function(req, res) {
 });
 
 app.post("/alexa", function(req, res) {
-    console.log('Received request from alexa..!' + bodyParser.stringify(req));
+    console.log('Received request from alexa..!' + CircularJSON.stringify(req));
     if (req.body.request.type === "LaunchRequest") {
         var resp = alexa.sayHello('Aditya');
         res.status(200).json(resp);
