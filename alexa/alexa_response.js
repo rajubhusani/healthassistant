@@ -33,10 +33,10 @@ alexa.advice = function(value, type) {
     var speakText = "<speak><p><break strength='none' time='500ms'/>You have a health advice<break strength='none' time='750ms'/>";
     switch (type) {
         case "blood pressure":
-            speakText = "Reduce the salt in your diet <break strength='none' time='750ms'/> Eat more fruits, vegetables, grains, and low-fat dairy foods</p></speak>";
+            speakText += "Reduce the salt in your diet <break strength='none' time='750ms'/> Eat more fruits, vegetables, grains, and low-fat dairy foods</p></speak>";
             break;
         case "blood sugar":
-            speakText = "Eliminate wheat in your diet <break strength='none' time='750ms'/> Check your stress level</p></speak>";
+            speakText += "Eliminate wheat in your diet <break strength='none' time='750ms'/> Check your stress level</p></speak>";
             break;
     }
 
