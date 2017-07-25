@@ -10,7 +10,7 @@ var COLLECTION = {
 
 var app = express();
 app.use(bodyParser.json());
-app.set('port', (process.env.PORT || 5003));
+app.set('port', (process.env.PORT || 5004));
 
 app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
@@ -129,7 +129,7 @@ app.post("/app/LogHealthData", function(req, res) {
 });
 
 app.post("/alexa", function(req, res) {
-    console.log('Received request from alexa..!' + CircularJSON.stringify(req));
+    //console.log('Received request from alexa..!' + CircularJSON.stringify(req));
     var alexa_id = req.body.context.System.user.userId;
     var userObj = null;
     db.collection(COLLECTION.USERS).find({
@@ -143,108 +143,119 @@ app.post("/alexa", function(req, res) {
             }
             userObj = docs[0];
             console.log(userObj);
-        }
-    });
-    if (req.body.request.type === "LaunchRequest") {
-        var resp = alexa.sayHello(userObj.name);
-        res.status(200).json(resp);
-    } else if (req.body.request.type === "IntentRequest") {
-        var intentName = req.body.request.intent.name;
-        switch (intentName) {
-            case "SayHello":
+
+            /////CODE ALEXA VOICE
+
+            if (req.body.request.type === "LaunchRequest") {
                 var resp = alexa.sayHello(userObj.name);
                 res.status(200).json(resp);
-                break;
-            case "AMAZON.CancelIntent":
-                var resp = alexa.sayGoodBye();
-                res.status(200).json(resp);
-                break;
-            case "GetTasks":
-                var date = "19 Jul 2017 01:35 pm";
-                var id = userObj._id;
-                db.collection(COLLECTION.USERS).find({
-                    $and: [{
-                            "_id": id
-                        },
-                        {
-                            "tasks": {
+            } else if (req.body.request.type === "IntentRequest") {
+                var intentName = req.body.request.intent.name;
+                switch (intentName) {
+                    case "SayHello":
+                        var resp = alexa.sayHello(userObj.name);
+                        res.status(200).json(resp);
+                        break;
+                    case "AMAZON.CancelIntent":
+                        var resp = alexa.sayGoodBye();
+                        res.status(200).json(resp);
+                        break;
+                    case "GetTasks":
+                        var date = "19 Jul 2017 01:35 pm";
+                        var id = userObj._id;
+                        db.collection(COLLECTION.USERS).find({
+                            $and: [{
+                                    "_id": id
+                                },
+                                {
+                                    "tasks": {
+                                        $elemMatch: {
+                                            "date": date
+                                        }
+                                    }
+                                }
+                            ]
+                        }).toArray(function(err, docs) {
+                            if (err) {
+                                handleError(res, err.message, "Error in finding tasks for the user");
+                            } else {
                                 $elemMatch: {
+                                    docs
+                                }
+                                var resp = alexa.sayTasks(docs);
+                                res.status(200).json(resp);
+                                /*if (docs.length > 0) {
+                                    var resp = alexa.sayTasks(docs);
+                                    res.status(200).json(resp);
+                                } else {
+                                    handleError(res, "No tasks scheduled yet");
+                                }*/
+                            }
+                        });
+
+                        break;
+
+                    case "ReadHealthData":
+                        var date = req.body.request.intent.slots.day.value; //2017-07-24
+                        var id = userObj._id;
+                        var slotName = req.body.request.intent.slots.measurementType.value; //steps
+                        console.log("Slot:" + slotName + " Date:" + date);
+                        db.collection(COLLECTION.USERS).find({
+                            "_id": id,
+                            "healthdata": {
+                                $elemMatch: {
+                                    "date": date,
+                                    "type": slotName
+                                }
+                            }
+                        }, { "healthdata.$": 1 }).toArray(function(err, docs) {
+                            if (err) {
+                                handleError(res, err.message, "You don't have data for " + slotName);
+                            } else {
+                                $elemMatch: {
+                                    docs
+                                }
+                                var resp = alexa.readData(docs, slotName);
+                                res.status(200).json(resp);
+                            }
+                        });
+                        break;
+
+                    case "LogHealthData":
+                        var date = req.body.request.intent.slots.day.value;
+                        var id = "1002";
+                        var slotName = req.body.request.intent.slots.measurementType.value;
+                        db.collection(COLLECTION.USERS).findOneAndUpdate({
+                            "_id": id
+                        }, {
+                            $addToSet: {
+                                "healthdata": {
+                                    "type": slotName,
+                                    "value": newTask.taskType,
                                     "date": date
                                 }
                             }
-                        }
-                    ]
-                }).toArray(function(err, docs) {
-                    if (err) {
-                        handleError(res, err.message, "Error in finding tasks for the user");
-                    } else {
-                        $elemMatch: {
-                            docs
-                        }
-                        var resp = alexa.sayTasks(docs);
-                        res.status(200).json(resp);
-                        /*if (docs.length > 0) {
-                            var resp = alexa.sayTasks(docs);
-                            res.status(200).json(resp);
-                        } else {
-                            handleError(res, "No tasks scheduled yet");
-                        }*/
-                    }
-                });
+                        }).then((resp) => {
+                            console.log('Task Successfully inserted');
+                            res.status(200).json({
+                                "success": "Task scheduled successfully"
+                            });
+                        }, (er) => {
+                            handleError(res, er.message, "Schduling task failed, please try again after sometime");
+                        });
+                        break;
+                }
+            }
 
-                break;
 
-            case "ReadHealthData":
-                var date = req.body.request.intent.slots.day.value; //2017-07-24
-                var id = userObj._id;
-                var slotName = req.body.request.intent.slots.measurementType.value; //steps
-                console.log("Slot:" + slotName + " Date:" + date);
-                db.collection(COLLECTION.USERS).find({
-                    "_id": id,
-                    "healthdata": {
-                        $elemMatch: {
-                            "date": date,
-                            "type": slotName
-                        }
-                    }
-                }, { "healthdata.$": 1 }).toArray(function(err, docs) {
-                    if (err) {
-                        handleError(res, err.message, "You don't have data for " + slotName);
-                    } else {
-                        $elemMatch: {
-                            docs
-                        }
-                        var resp = alexa.readData(docs, slotName);
-                        res.status(200).json(resp);
-                    }
-                });
-                break;
 
-            case "LogHealthData":
-                var date = req.body.request.intent.slots.day.value;
-                var id = "1002";
-                var slotName = req.body.request.intent.slots.measurementType.value;
-                db.collection(COLLECTION.USERS).findOneAndUpdate({
-                    "_id": id
-                }, {
-                    $addToSet: {
-                        "healthdata": {
-                            "type": slotName,
-                            "value": newTask.taskType,
-                            "date": date
-                        }
-                    }
-                }).then((resp) => {
-                    console.log('Task Successfully inserted');
-                    res.status(200).json({
-                        "success": "Task scheduled successfully"
-                    });
-                }, (er) => {
-                    handleError(res, er.message, "Schduling task failed, please try again after sometime");
-                });
-                break;
+
+            ///////END
+
+
         }
-    }
+    });
+
 });
 
 app.listen(app.get('port'), function() {
