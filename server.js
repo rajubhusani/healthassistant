@@ -141,7 +141,7 @@ app.post("/alexa", function(req, res) {
             $elemMatch: {
                 docs
             }
-            userObj = docs;
+            userObj = docs[0];
             console.log(docs);
         }
     });
