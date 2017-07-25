@@ -22,7 +22,7 @@ alexa.readData = function(taskResponse, measurement) {
     var alexaText = "<speak><p>You have not captured your readings.. <break strength='none' time='750ms'/> Is there anything else I can help with? </p></speak>";
     if (!taskResponse || taskResponse.length !== 0) {
         alexaText = "<speak>Your " + measurement + " value is " + taskResponse[0].healthdata[0].value + "<break strength='none' time='750ms'/> Is there anything else I can help with? </speak>";
-        //alexaText += alexa.advice(taskResponse[0].healthdata[0].value, measurement);
+        alexaText += alexa.advice(taskResponse[0].healthdata[0].value, measurement);
     }
 
     return alexa.getSSMLResponse(alexaText, false, true);
@@ -30,9 +30,9 @@ alexa.readData = function(taskResponse, measurement) {
 
 alexa.advice = function(value, type) {
     console.log("Advice");
-    var speakText = "<break strength='none' time='500ms'/>You have a health advice<break strength='none' time='750ms'/>";
+    var speakText = "<speak><p><break strength='none' time='500ms'/>You have a health advice<break strength='none' time='750ms'/>";
     switch (type) {
-        case "Blood Pressure":
+        case "blood pressure":
             speakText = "Reduce the salt in your diet <break strength='none' time='750ms'/> Eat more fruits, vegetables, grains, and low-fat dairy foods</speak></p>";
             break;
         case "blood sugar":
