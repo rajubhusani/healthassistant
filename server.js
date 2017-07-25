@@ -131,26 +131,28 @@ app.post("/app/LogHealthData", function(req, res) {
 app.post("/alexa", function(req, res) {
     console.log('Received request from alexa..!' + CircularJSON.stringify(req));
     var alexa_id = req.body.context.System.user.userId;
+    var userObj = null;
     db.collection(COLLECTION.USERS).find({
         "alexa_id": alexa_id
-    }, { _id: 1, Name: 1 }).toArray(function(err, docs) {
+    }, { _id: 1, name: 1 }).toArray(function(err, docs) {
         if (err) {
             handleError(res, err.message, "Error in finding user details");
         } else {
             $elemMatch: {
                 docs
             }
+            userObj = docs;
             console.log(docs);
         }
     });
     if (req.body.request.type === "LaunchRequest") {
-        var resp = alexa.sayHello('Aditya');
+        var resp = alexa.sayHello(userObj.name);
         res.status(200).json(resp);
     } else if (req.body.request.type === "IntentRequest") {
         var intentName = req.body.request.intent.name;
         switch (intentName) {
             case "SayHello":
-                var resp = alexa.sayHello('Aditya');
+                var resp = alexa.sayHello(userObj.name);
                 res.status(200).json(resp);
                 break;
             case "AMAZON.CancelIntent":
@@ -159,7 +161,7 @@ app.post("/alexa", function(req, res) {
                 break;
             case "GetTasks":
                 var date = "19 Jul 2017 01:35 pm";
-                var id = "1002";
+                var id = userObj._id;
                 db.collection(COLLECTION.USERS).find({
                     $and: [{
                             "_id": id
@@ -194,7 +196,7 @@ app.post("/alexa", function(req, res) {
 
             case "ReadHealthData":
                 var date = req.body.request.intent.slots.day.value; //2017-07-24
-                var id = "1002";
+                var id = userObj._id;
                 var slotName = req.body.request.intent.slots.measurementType.value; //steps
                 console.log("Slot:" + slotName + " Date:" + date);
                 db.collection(COLLECTION.USERS).find({
