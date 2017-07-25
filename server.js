@@ -10,7 +10,7 @@ var COLLECTION = {
 
 var app = express();
 app.use(bodyParser.json());
-app.set('port', (process.env.PORT || 5002));
+app.set('port', (process.env.PORT || 5003));
 
 app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
@@ -130,6 +130,19 @@ app.post("/app/LogHealthData", function(req, res) {
 
 app.post("/alexa", function(req, res) {
     console.log('Received request from alexa..!' + CircularJSON.stringify(req));
+    var alexa_id = req.body.context.System.user.userId;
+    db.collection(COLLECTION.USERS).find({
+        "alexa_id": alexa_id
+    }, { _id: 1, Name: 1 }).toArray(function(err, docs) {
+        if (err) {
+            handleError(res, err.message, "Error in finding user details");
+        } else {
+            $elemMatch: {
+                docs
+            }
+            console.log(docs);
+        }
+    });
     if (req.body.request.type === "LaunchRequest") {
         var resp = alexa.sayHello('Aditya');
         res.status(200).json(resp);
