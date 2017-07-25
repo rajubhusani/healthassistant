@@ -134,7 +134,7 @@ app.post("/alexa", function(req, res) {
     var userObj = null;
     db.collection(COLLECTION.USERS).find({
         "alexa_id": alexa_id
-    }, { _id: 1, name: 1 }).toArray(function(err, docs) {
+    }, { "_id": 1, "name": 1 }).toArray(function(err, docs) {
         if (err) {
             handleError(res, err.message, "Error in finding user details");
         } else {
@@ -142,7 +142,7 @@ app.post("/alexa", function(req, res) {
                 docs
             }
             userObj = docs[0];
-            console.log(docs);
+            console.log(userObj);
         }
     });
     if (req.body.request.type === "LaunchRequest") {
