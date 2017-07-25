@@ -21,7 +21,7 @@ alexa.readData = function(taskResponse, measurement) {
     var response = JSON.stringify(taskResponse);
     var alexaText = "<speak><p>You have not captured your readings.. <break strength='none' time='750ms'/> Is there anything else I can help with? </p></speak>";
     if (!taskResponse || taskResponse.length !== 0) {
-        alexaText = "<speak><p>Your " + measurement + " value is " + taskResponse[0].healthdata[0].value + "<break strength='none' time='750ms'/> Is there anything else I can help with? </p></speak>";
+        alexaText = "<speak><p>Your " + measurement + " value is " + taskResponse[0].healthdata[0].value; //+ "<break strength='none' time='750ms'/> Is there anything else I can help with? </p></speak>";
     }
 
     alexaText += alexa.advice(taskResponse[0].healthdata[0].value, measurement);
@@ -54,16 +54,16 @@ alexa.getSSMLResponse = function(dynamicText, isEndSession, requireLastIntent) {
             "reprompt": {
                 "outputSpeech": {
                     "type": "SSML",
-                    "ssml": "<speak><p>You can say, what are my goals for today, what is my medication schedule, or message my health coach.</p></speak>"
+                    "ssml": "<speak><p>Is there anything else I can help with? </p></speak>"
                 }
             },
             "speechletResponse": {
                 "outputSpeech": {
-                    "ssml": "<speak><p>Nagaraju, welcome back to HealthActivate, You have a medication reminder, <break strength='none' time='1s'/> at 08:20 AM you are scheduled to take your ACE medication.<break strength='none' time='750ms'/> How may I help you? </p></speak>"
+                    "ssml": dynamicText
                 },
                 "reprompt": {
                     "outputSpeech": {
-                        "ssml": "<speak><p>You can say, what are my goals for today, what is my medication schedule, or message my health coach.</p></speak>"
+                        "ssml": "<speak><p>Is there anything else I can help with? </p></speak>"
                     }
                 },
                 "shouldEndSession": isEndSession
@@ -71,7 +71,8 @@ alexa.getSSMLResponse = function(dynamicText, isEndSession, requireLastIntent) {
         },
         "sessionAttributes": {
             "SayMsgData": dynamicText,
-            "rePromtData": "<p>You can say, what are my goals for today, what is my medication schedule, or message my health coach.</p>",
+            "rePromtData": "<p>Is there anything else I can help with? </p>",
+            "orbitaSession": {},
             "requireLastIntent": requireLastIntent
         }
     };
