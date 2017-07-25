@@ -29,6 +29,7 @@ alexa.readData = function(taskResponse, measurement) {
 };
 
 alexa.advice = function(value, type) {
+    console.log("Advice");
     var speakText = "<break strength='none' time='500ms'/>You have a health advice<break strength='none' time='750ms'/>";
     switch (type) {
         case "Blood Pressure":
