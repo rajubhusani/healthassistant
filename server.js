@@ -128,7 +128,7 @@ app.post("/app/LogHealthData", function(req, res) {
 });
 
 app.post("/alexa", function(req, res) {
-    console.log('Received request from alexa..!' + JSON.stringify(req));
+    console.log('Received request from alexa..!' + bodyParser.stringify(req));
     if (req.body.request.type === "LaunchRequest") {
         var resp = alexa.sayHello('Aditya');
         res.status(200).json(resp);
