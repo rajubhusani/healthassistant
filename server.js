@@ -10,7 +10,7 @@ var COLLECTION = {
 
 var app = express();
 app.use(bodyParser.json());
-app.set('port', (process.env.PORT || 5004));
+app.set('port', (process.env.PORT || 5005));
 
 app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
@@ -124,11 +124,29 @@ app.post("/app/LogHealthData", function(req, res) {
         res.status(200).json({
             "success": "Data scheduled successfully"
         });
-        evaluator.evaluate(newTask._id, newTask.value, type, db);
+        var tips = evaluator.evaluate(newTask._id, newTask.value, type, db);
+        if (tips !== null) app.updateTips(newTask._id, tips);
     }, (er) => {
         handleError(res, er.message, "Data insert failed, please try again after sometime");
     });
 });
+
+app.updateTips = function(userid, tip) {
+    console.log('updateTips');
+    db.collection(COLLECTION.USERS).findOneAndUpdate({
+        "_id": userid
+    }, {
+        $addToSet: {
+            "tips": {
+                "value": tip
+            }
+        }
+    }).then((resp) => {
+        console.log('tip Successfully inserted');
+    }, (er) => {
+        console.log("tip insert failed, please try again after sometime");
+    });
+};
 
 app.post("/alexa", function(req, res) {
     //console.log('Received request from alexa..!' + CircularJSON.stringify(req));

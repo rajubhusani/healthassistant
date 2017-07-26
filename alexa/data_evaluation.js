@@ -2,6 +2,7 @@ var dataEvaluator = module.exports = {};
 var format = require('string-format');
 
 dataEvaluator.evaluate = function(userid, value, type, dataBase) {
+    console.log(type + '::' + value);
     var tip = null;
     switch (type) {
         case "blood pressure":
@@ -24,21 +25,5 @@ dataEvaluator.evaluate = function(userid, value, type, dataBase) {
             }
             break;
     }
-    if (tip !== null) dataEvaluator.updateTips(userid, tip, dataBase);
-};
-
-dataEvaluator.updateTips = function(userid, tip, db) {
-    db.collection(COLLECTION.USERS).findOneAndUpdate({
-        "_id": userid
-    }, {
-        $addToSet: {
-            "tips": {
-                "value": tip
-            }
-        }
-    }).then((resp) => {
-        console.log('tip Successfully inserted');
-    }, (er) => {
-        console.log("tip insert failed, please try again after sometime");
-    });
+    return tip;
 };
