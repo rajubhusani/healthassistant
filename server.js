@@ -17,6 +17,7 @@ app.engine('html', require('ejs').renderFile);
 
 var db;
 var alexa = require("./alexa/alexa_response");
+var evaluator = require("./alexa/data_evaluation");
 
 // Connect to the database before starting the application server.
 mongodb.MongoClient.connect(MONGO_CONNECTION_URL, function(err, database) {
@@ -126,6 +127,7 @@ app.post("/app/LogHealthData", function(req, res) {
     }, (er) => {
         handleError(res, er.message, "Data insert failed, please try again after sometime");
     });
+    evaluator.evaluate(newTask._id, newTask.value, type);
 });
 
 app.post("/alexa", function(req, res) {
@@ -216,6 +218,23 @@ app.post("/alexa", function(req, res) {
                                     docs
                                 }
                                 var resp = alexa.readData(docs, slotName);
+                                res.status(200).json(resp);
+                            }
+                        });
+                        break;
+
+                    case "GetTips":
+                        var id = userObj._id;
+                        db.collection(COLLECTION.USERS).find({
+                            "_id": id
+                        }, { "tips.$": 1 }).toArray(function(err, docs) {
+                            if (err) {
+                                handleError(res, err.message, "You don't have any tips");
+                            } else {
+                                $elemMatch: {
+                                    docs
+                                }
+                                var resp = alexa.getSSMLResponse(docs, false, false);
                                 res.status(200).json(resp);
                             }
                         });
