@@ -125,7 +125,9 @@ app.post("/app/LogHealthData", function(req, res) {
             "success": "Data scheduled successfully"
         });
         var tips = evaluator.evaluate(newTask._id, newTask.value, type, db);
-        if (tips !== null) app.updateTips(newTask._id, tips);
+        if (tips !== null) {
+            app.updateTips(newTask._id, tips);
+        }
     }, (er) => {
         handleError(res, er.message, "Data insert failed, please try again after sometime");
     });
@@ -163,7 +165,6 @@ app.post("/alexa", function(req, res) {
             }
             userObj = docs[0];
             console.log(userObj);
-
             /////CODE ALEXA VOICE
 
             if (req.body.request.type === "LaunchRequest") {
