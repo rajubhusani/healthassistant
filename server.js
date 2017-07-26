@@ -127,7 +127,7 @@ app.post("/app/LogHealthData", function(req, res) {
     }, (er) => {
         handleError(res, er.message, "Data insert failed, please try again after sometime");
     });
-    evaluator.evaluate(newTask._id, newTask.value, type);
+    evaluator.evaluate(newTask._id, newTask.value, type, db);
 });
 
 app.post("/alexa", function(req, res) {

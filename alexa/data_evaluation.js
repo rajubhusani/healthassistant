@@ -1,7 +1,7 @@
 var dataEvaluator = module.exports = {};
 var format = require('string-format');
 
-dataEvaluator.evaluate = function(userid, value, type) {
+dataEvaluator.evaluate = function(userid, value, type, dataBase) {
     var tip = null;
     switch (type) {
         case "blood pressure":
@@ -24,10 +24,10 @@ dataEvaluator.evaluate = function(userid, value, type) {
             }
             break;
     }
-    if (tip !== null) dataEvaluator.updateTips(userid, tip);
+    if (tip !== null) dataEvaluator.updateTips(userid, tip, dataBase);
 };
 
-dataEvaluator.updateTips = function(userid, tip) {
+dataEvaluator.updateTips = function(userid, tip, db) {
     db.collection(COLLECTION.USERS).findOneAndUpdate({
         "_id": userid
     }, {
