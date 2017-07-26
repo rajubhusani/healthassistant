@@ -124,10 +124,10 @@ app.post("/app/LogHealthData", function(req, res) {
         res.status(200).json({
             "success": "Data scheduled successfully"
         });
+        evaluator.evaluate(newTask._id, newTask.value, type, db);
     }, (er) => {
         handleError(res, er.message, "Data insert failed, please try again after sometime");
     });
-    evaluator.evaluate(newTask._id, newTask.value, type, db);
 });
 
 app.post("/alexa", function(req, res) {
