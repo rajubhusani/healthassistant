@@ -24,7 +24,7 @@ dataEvaluator.evaluate = function(userid, value, type) {
             }
             break;
     }
-    dataEvaluator.updateTips(userid, tip);
+    if (tip !== null) dataEvaluator.updateTips(userid, tip);
 };
 
 dataEvaluator.updateTips = function(userid, tip) {
