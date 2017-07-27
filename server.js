@@ -173,6 +173,7 @@ app.post("/alexa", function(req, res) {
                 res.status(200).json(resp);
             } else if (req.body.request.type === "IntentRequest") {
                 var intentName = req.body.request.intent.name;
+                console.log("Intent Name:" + intentName);
                 switch (intentName) {
                     case "SayHello":
                         var resp = alexa.sayHello(userObj.name);
