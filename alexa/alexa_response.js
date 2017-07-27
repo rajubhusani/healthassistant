@@ -13,9 +13,8 @@ alexa.sayGoodBye = function() {
 };
 
 alexa.sayTasks = function(taskResponse) {
-    console.log('Task Received to Alexa: ', JSON.stringify(taskResponse));
-
-    return alexa.getSSMLResponse(text, true, false);
+    var text = "You have " + taskResponse[0].tasks.taskDesc + " " + taskResponse[0].tasks.tasktype + " at " + taskResponse[0].tasks.time;
+    return alexa.getSSMLResponse(text, false, false);
 };
 
 alexa.readData = function(taskResponse, measurement) {
