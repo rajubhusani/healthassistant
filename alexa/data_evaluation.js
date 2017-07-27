@@ -19,7 +19,7 @@ dataEvaluator.evaluate = function(userid, value, type, dataBase) {
             break;
         case "blood sugar":
             if (value > 180) {
-                tip = "Eliminate wheat in your diet <break strength='none' time='750ms'/> Check your stress level</p></speak>";
+                tip = "Eliminate wheat in your diet <break strength='none' time='750ms'/> Check your stress level";
             } else if (value < 70) {
                 tip = "Very low blood sugar is a medical emergency";
             }

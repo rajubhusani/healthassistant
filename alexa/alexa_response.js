@@ -21,10 +21,10 @@ alexa.readData = function(taskResponse, measurement) {
     var response = JSON.stringify(taskResponse);
     var alexaText = "<speak><p>You have not captured your readings.. <break strength='none' time='750ms'/> Is there anything else I can help with? </p></speak>";
     if (!taskResponse || taskResponse.length !== 0) {
-        alexaText = "<speak><p>Your " + measurement + " value is " + taskResponse[0].healthdata[0].value;
+        alexaText = "<speak><p>Your " + measurement + " value is " + taskResponse[0].healthdata[0].value + "</speak></p>";
     }
 
-    return alexa.getSSMLResponse(alexaText, false, true);
+    return alexa.getSSMLResponse(alexaText, false, false);
 };
 
 alexa.getSSMLResponse = function(dynamicText, isEndSession, requireLastIntent) {
