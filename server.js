@@ -2,9 +2,6 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var mongodb = require("mongodb");
 var CircularJSON = require("circular-json");
-var AlexaAppServer = require('alexa-app-server');
-var Alexa = require('alexa-sdk');
-var APP_ID = "";
 
 var MONGO_CONNECTION_URL = 'mongodb://adityakotamraju:Health123@ds151752.mlab.com:51752/health_assistant';
 var COLLECTION = {
@@ -14,14 +11,6 @@ var COLLECTION = {
 var app = express();
 app.use(bodyParser.json());
 app.set('port', (process.env.PORT || 5007));
-
-var instance = AlexaAppServer.start({
-    server_root: __dirname, // Path to root 
-    public_html: "/views", // Static content 
-    app_dir: "/", // Location of alexa-app modules 
-    app_root: "/alexa", // Service root 
-    port: 8080 // Port to use 
-});
 
 app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
@@ -310,72 +299,3 @@ app.post("/alexa", function(req, res) {
 app.listen(app.get('port'), function() {
     console.log('Node app is running on port', app.get('port'));
 });
-
-exports.handler = function(event, context, callback) {
-    var alexa = Alexa.handler(event, context);
-    alexa.APP_ID = APP_ID;
-    // To enable string internationalization (i18n) features, set a resources object.
-    alexa.resources = languageStrings;
-    alexa.registerHandlers(handlers);
-    alexa.execute();
-};
-
-var handlers = {
-    //Use LaunchRequest, instead of NewSession if you want to use the one-shot model
-    // Alexa, ask [my-skill-invocation-name] to (do something)...
-    'LaunchRequest': function() {
-        db.collection(COLLECTION.USERS).find({
-            "alexa_id": alexa_id
-        }, { "_id": 1, "name": 1 }).toArray(function(err, docs) {
-            if (err) {
-                handleError(res, err.message, "Error in finding user details");
-            } else {
-                $elemMatch: {
-                    docs
-                }
-                userObj = docs[0];
-                var resp = alexa.sayHello(userObj.name);
-                this.attributes['speechOutput'] = resp; //this.t("WELCOME_MESSAGE", this.t("SKILL_NAME"));
-                // If the user either does not reply to the welcome message or says something that is not
-                // understood, they will be prompted again with this text.
-                this.attributes['repromptSpeech'] = this.t("HELP_REPROMPT");
-                this.emit(':ask', this.attributes['speechOutput'], this.attributes['repromptSpeech'])
-            }
-        });
-    },
-    'AMAZON.HelpIntent': function() {
-        this.attributes['speechOutput'] = this.t("HELP_MESSAGE");
-        this.attributes['repromptSpeech'] = this.t("HELP_REPROMPT");
-        this.emit(':ask', this.attributes['speechOutput'], this.attributes['repromptSpeech'])
-    },
-    'AMAZON.RepeatIntent': function() {
-        this.emit(':ask', this.attributes['speechOutput'], this.attributes['repromptSpeech'])
-    },
-    'AMAZON.StopIntent': function() {
-        this.emit('SessionEndedRequest');
-    },
-    'AMAZON.CancelIntent': function() {
-        this.emit('SessionEndedRequest');
-    },
-    'SessionEndedRequest': function() {
-        this.emit(':tell', this.t("STOP_MESSAGE"));
-    },
-    'Unhandled': function() {
-        this.attributes['speechOutput'] = this.t("HELP_MESSAGE");
-        this.attributes['repromptSpeech'] = this.t("HELP_REPROMPT");
-        this.emit(':ask', this.attributes['speechOutput'], this.attributes['repromptSpeech'])
-    }
-};
-
-var languageStrings = {
-    "en": {
-        "translation": {
-            "SKILL_NAME": "Minecraft Helper",
-            "WELCOME_MESSAGE": "Welcome to %s. You can ask a question like, what\'s the recipe for a chest? ... Now, what can I help you with.",
-            "WELCOME_REPROMPT": "Is there anything else I can help with?",
-            "HELP_MESSAGE": "You can ask questions such as, my steps today or what\'s my tips, what can I help you with?",
-            "HELP_REPROMPT": "You can say things like, what\'s my tips, or you can say cancel...Now, what can I help you with?",
-            "STOP_MESSAGE": "Goodbye!"
-        }
-    }
-};
