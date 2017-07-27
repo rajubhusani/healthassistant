@@ -13,7 +13,7 @@ alexa.sayGoodBye = function() {
 };
 
 alexa.sayTasks = function(taskResponse) {
-    var text = "You have " + taskResponse[0].tasks.taskDesc + " " + taskResponse[0].tasks.tasktype + " at " + taskResponse[0].tasks.time;
+    var text = "You have " + taskResponse[0].tasks[0].taskDesc + " " + taskResponse[0].tasks[0].tasktype + " at " + taskResponse[0].tasks[0].time;
     return alexa.getSSMLResponse(text, false, false);
 };
 
