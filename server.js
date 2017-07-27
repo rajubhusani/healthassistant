@@ -184,7 +184,7 @@ app.post("/alexa", function(req, res) {
                         res.status(200).json(resp);
                         break;
                     case "GetTasks":
-                        var date = req.body.request.intent.day.value;
+                        var date = req.body.request.intent.slots.day.value;
                         console.log('Date from Alexa: ', date);
                         var id = userObj._id;
                         db.collection(COLLECTION.USERS).find({
