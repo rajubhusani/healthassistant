@@ -49,17 +49,16 @@ alexa.getSSMLResponse = function(dynamicText, isEndSession, requireLastIntent) {
                     "outputSpeech": {
                         "ssml": "<speak><p>Is there anything else I can help with? </p></speak>"
                     }
-                },
-                "shouldEndSession": isEndSession
-            }
+                }
+            },
+            "shouldEndSession": isEndSession
         },
         "sessionAttributes": {
             "SayMsgData": dynamicText,
-            "rePromtData": "<p>Is there anything else I can help with? </p>",
-            "orbitaSession": {},
+            "rePromtData": "<speak>Is there anything else I can help with? </speak>",
             "requireLastIntent": requireLastIntent
         }
     };
-
+    // console.log(resp);
     return resp;
 };
