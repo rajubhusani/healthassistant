@@ -10,7 +10,7 @@ var COLLECTION = {
 
 var app = express();
 app.use(bodyParser.json());
-app.set('port', (process.env.PORT || 5005));
+app.set('port', (process.env.PORT || 5008));
 
 app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
@@ -81,9 +81,12 @@ app.post("/app/scheduleTask", function(req, res) {
 
     var newTask = req.body;
     var moment = require("moment");
-    var taskDate = moment(newTask.dateTime, "x").format("DD MMM YYYY hh:mm a");
+    var taskDate = moment.utc(newTask.dateTime).toString();
+    var date = taskDate.slice(1, 10);
+    console.log('Date: ', date);
+    console.log('Time: ');
     console.log('Task Received: ', newTask);
-    db.collection(COLLECTION.USERS).findOneAndUpdate({
+    /*db.collection(COLLECTION.USERS).findOneAndUpdate({
         "_id": newTask._id
     }, {
         $addToSet: {
@@ -100,7 +103,7 @@ app.post("/app/scheduleTask", function(req, res) {
         });
     }, (er) => {
         handleError(res, er.message, "Schduling task failed, please try again after sometime");
-    });
+    });*/
 });
 
 app.post("/app/LogHealthData", function(req, res) {
