@@ -260,29 +260,29 @@ app.post("/alexa", function(req, res) {
                         });
                         break;
 
-                    case "LogHealthData":
-                        var date = req.body.request.intent.slots.day.value;
-                        var id = "1002";
-                        var slotName = req.body.request.intent.slots.measurementType.value;
-                        db.collection(COLLECTION.USERS).findOneAndUpdate({
-                            "_id": id
-                        }, {
-                            $addToSet: {
-                                "healthdata": {
-                                    "type": slotName,
-                                    "value": newTask.taskType,
-                                    "date": date
-                                }
-                            }
-                        }).then((resp) => {
-                            console.log('Task Successfully inserted');
-                            res.status(200).json({
-                                "success": "Task scheduled successfully"
-                            });
-                        }, (er) => {
-                            handleError(res, er.message, "Schduling task failed, please try again after sometime");
-                        });
-                        break;
+                        // case "LogHealthData":
+                        //     var date = req.body.request.intent.slots.day.value;
+                        //     var id = "1002";
+                        //     var slotName = req.body.request.intent.slots.measurementType.value;
+                        //     db.collection(COLLECTION.USERS).findOneAndUpdate({
+                        //         "_id": id
+                        //     }, {
+                        //         $addToSet: {
+                        //             "healthdata": {
+                        //                 "type": slotName,
+                        //                 "value": newTask.taskType,
+                        //                 "date": date
+                        //             }
+                        //         }
+                        //     }).then((resp) => {
+                        //         console.log('Task Successfully inserted');
+                        //         res.status(200).json({
+                        //             "success": "Task scheduled successfully"
+                        //         });
+                        //     }, (er) => {
+                        //         handleError(res, er.message, "Schduling task failed, please try again after sometime");
+                        //     });
+                        //     break;
                 }
             }
 
