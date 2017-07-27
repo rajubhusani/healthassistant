@@ -183,21 +183,17 @@ app.post("/alexa", function(req, res) {
                         res.status(200).json(resp);
                         break;
                     case "GetTasks":
-                        var date = "19 Jul 2017 01:35 pm";
+                        var date = req.body.request.intent.day.value;
+                        console.log('Date from Alexa: ', date);
                         var id = userObj._id;
                         db.collection(COLLECTION.USERS).find({
-                            $and: [{
-                                    "_id": id
-                                },
-                                {
-                                    "tasks": {
-                                        $elemMatch: {
-                                            "date": date
-                                        }
-                                    }
+                            "_id": id,
+                            "tasks": {
+                                $elemMatch: {
+                                    "date": date
                                 }
-                            ]
-                        }).toArray(function(err, docs) {
+                            }
+                        }, { "tasks.$": 1 }).toArray(function(err, docs) {
                             if (err) {
                                 handleError(res, err.message, "Error in finding tasks for the user");
                             } else {
@@ -206,15 +202,8 @@ app.post("/alexa", function(req, res) {
                                 }
                                 var resp = alexa.sayTasks(docs);
                                 res.status(200).json(resp);
-                                /*if (docs.length > 0) {
-                                    var resp = alexa.sayTasks(docs);
-                                    res.status(200).json(resp);
-                                } else {
-                                    handleError(res, "No tasks scheduled yet");
-                                }*/
                             }
                         });
-
                         break;
 
                     case "ReadHealthData":
@@ -285,16 +274,9 @@ app.post("/alexa", function(req, res) {
                         //     break;
                 }
             }
-
-
-
-
             ///////END
-
-
         }
     });
-
 });
 
 app.listen(app.get('port'), function() {
