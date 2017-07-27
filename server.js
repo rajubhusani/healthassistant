@@ -81,19 +81,16 @@ app.post("/app/scheduleTask", function(req, res) {
 
     var newTask = req.body;
     var moment = require("moment");
-    var taskDate = moment.utc(newTask.dateTime).toString();
-    var date = taskDate.slice(1, 10);
-    console.log('Date: ', date);
-    console.log('Time: ');
     console.log('Task Received: ', newTask);
-    /*db.collection(COLLECTION.USERS).findOneAndUpdate({
+    db.collection(COLLECTION.USERS).findOneAndUpdate({
         "_id": newTask._id
     }, {
         $addToSet: {
             "tasks": {
                 "tasktype": newTask.taskType,
                 "taskDesc": newTask.taskDesc,
-                "date": taskDate
+                "date": newTask.date,
+                "time": newTask.time
             }
         }
     }).then((resp) => {
@@ -103,7 +100,7 @@ app.post("/app/scheduleTask", function(req, res) {
         });
     }, (er) => {
         handleError(res, er.message, "Schduling task failed, please try again after sometime");
-    });*/
+    });
 });
 
 app.post("/app/LogHealthData", function(req, res) {
