@@ -247,13 +247,14 @@ app.post("/alexa", function(req, res) {
                         var id = userObj._id;
                         db.collection(COLLECTION.USERS).find({
                             "_id": id
-                        }, { "tips": 1 }).toArray(function(err, docs) {
+                        }, { "tips.$": 1 }).toArray(function(err, docs) {
                             if (err) {
                                 handleError(res, err.message, "You don't have any tips");
                             } else {
                                 $elemMatch: {
                                     docs
                                 }
+                                console.log(docs);
                                 var resp = alexa.getSSMLResponse(docs, false, false);
                                 res.status(200).json(resp);
                             }
@@ -285,10 +286,6 @@ app.post("/alexa", function(req, res) {
                         //     break;
                 }
             }
-
-
-
-
             ///////END
 
 
