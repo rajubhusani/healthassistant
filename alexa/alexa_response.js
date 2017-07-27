@@ -14,6 +14,8 @@ alexa.sayGoodBye = function() {
 
 alexa.sayTasks = function(taskResponse) {
     console.log('Task Received to Alexa: ', JSON.stringify(taskResponse));
+
+    return alexa.getSSMLResponse(text, true, false);
 };
 
 alexa.readData = function(taskResponse, measurement) {
