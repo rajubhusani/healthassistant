@@ -8,7 +8,7 @@ alexa.sayHello = function(username) {
 };
 
 alexa.sayGoodBye = function() {
-    var text = format("<speak><p>Goodbye hope you come back soon</p></speak>");
+    var text = format("<speak><p>Goodbyebreak strength='none' time='750ms'/>hope you come back soon</p></speak>");
     return alexa.getSSMLResponse(text, true, false);
 };
 
@@ -35,12 +35,13 @@ alexa.sayTips = function(taskResponse) {
 
 alexa.readData = function(taskResponse, measurement) {
     console.log('Data Send to Alexa: ', JSON.stringify(taskResponse));
-    var response = JSON.stringify(taskResponse);
     var alexaText = "<speak><p>You have not captured your readings.. <break strength='none' time='750ms'/> Is there anything else I can help with? </p></speak>";
-    if (!taskResponse || taskResponse.length !== 0) {
-        alexaText = "<speak><p>Your " + measurement + " value is " + taskResponse[0].healthdata[0].value + "</speak></p>";
+    if (typeof taskResponse !== undefined && taskResponse.length > 0) {
+        var response = JSON.stringify(taskResponse);
+        if (!taskResponse || taskResponse.length !== 0) {
+            alexaText = "<speak><p>Your " + measurement + " value is " + taskResponse[0].healthdata[0].value + "</speak></p>";
+        }
     }
-
     return alexa.getSSMLResponse(alexaText, false, false);
 };
 
