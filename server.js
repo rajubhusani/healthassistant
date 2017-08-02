@@ -250,6 +250,10 @@ app.post("/alexa", function(req, res) {
                             }
                         });
                         break;
+                    default:
+                        var text = "<speak>You can say get tips, get tasks, read health data</speak>";
+                        alexa.getSSMLResponse(text, false, false);
+                        break;
 
                         // case "LogHealthData":
                         //     var date = req.body.request.intent.slots.day.value;

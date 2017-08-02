@@ -8,7 +8,7 @@ alexa.sayHello = function(username) {
 };
 
 alexa.sayGoodBye = function() {
-    var text = format("<speak><p>Goodbye {}, hope you come back soon</p></speak>", username);
+    var text = format("<speak><p>Goodbye hope you come back soon</p></speak>");
     return alexa.getSSMLResponse(text, true, false);
 };
 
