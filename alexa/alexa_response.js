@@ -8,19 +8,29 @@ alexa.sayHello = function(username) {
 };
 
 alexa.sayGoodBye = function() {
-    var text = format("<speak><p>Goodbye {},</p></speak>", username);
+    var text = format("<speak><p>Goodbye {}, hope you come back soon</p></speak>", username);
     return alexa.getSSMLResponse(text, true, false);
 };
 
 alexa.sayTasks = function(taskResponse) {
-    var text = "You have " + taskResponse[0].tasks[0].taskDesc + " " + taskResponse[0].tasks[0].tasktype + " at " + taskResponse[0].tasks[0].time;
-    return alexa.getSSMLResponse(text, false, false);
+    if (typeof taskResponse !== undefined && taskResponse.length > 0) {
+        var text = "<speak>You have " + taskResponse[0].tasks[0].taskDesc + " " + taskResponse[0].tasks[0].tasktype + " at " + taskResponse[0].tasks[0].time + "<break strength='none' time='750ms'/> Is there anything else I can help with?</speak>";
+        return alexa.getSSMLResponse(text, false, false);
+    } else {
+        var text = "<speak>You have no tasks<break strength='none' time='750ms'/> Is there anything else I can help with?</speak>";
+        return alexa.getSSMLResponse(text, false, false);
+    }
+
 };
 
 alexa.sayTips = function(taskResponse) {
-    console.log('Tip: ', JSON.stringify(taskResponse[0].tips[0]));
-    var text = "<speak>" + taskResponse[0].tips[0].value + "</speak>";
-    return alexa.getSSMLResponse(text, false, false);
+    if (typeof taskResponse !== undefined && taskResponse.length > 0) {
+        var text = "<speak>" + taskResponse[0].tips[0].value + "<break strength='none' time='750ms'/> Is there anything else I can help with?</speak>";
+        return alexa.getSSMLResponse(text, false, false);
+    } else {
+        var text = "<speak>You have no tips<break strength='none' time='750ms'/> Is there anything else I can help with?</speak>";
+        return alexa.getSSMLResponse(text, false, false);
+    }
 };
 
 alexa.readData = function(taskResponse, measurement) {
