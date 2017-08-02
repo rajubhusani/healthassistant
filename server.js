@@ -252,7 +252,9 @@ app.post("/alexa", function(req, res) {
                         break;
                     default:
                         var text = "<speak>You can say get tips, get tasks, read health data</speak>";
-                        alexa.getSSMLResponse(text, false, false);
+                        var resp = alexa.getSSMLResponse(text, false, false);
+                        res.status(200).json(resp);
+
                         break;
 
                         // case "LogHealthData":
