@@ -245,7 +245,7 @@ app.post("/alexa", function(req, res) {
                                     docs
                                 }
                                 console.log(docs);
-                                var resp = alexa.getSSMLResponse(docs, false, false);
+                                var resp = alexa.sayTips(docs);
                                 res.status(200).json(resp);
                             }
                         });

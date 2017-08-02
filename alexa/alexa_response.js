@@ -17,6 +17,11 @@ alexa.sayTasks = function(taskResponse) {
     return alexa.getSSMLResponse(text, false, false);
 };
 
+alexa.sayTips = function(taskResponse) {
+    var text = taskResponse[0].value;
+    return alexa.getSSMLResponse(text, false, false);
+};
+
 alexa.readData = function(taskResponse, measurement) {
     console.log('Data Send to Alexa: ', JSON.stringify(taskResponse));
     var response = JSON.stringify(taskResponse);
