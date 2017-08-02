@@ -18,7 +18,7 @@ alexa.sayTasks = function(taskResponse) {
 };
 
 alexa.sayTips = function(taskResponse) {
-    var text = taskResponse[0].value;
+    var text = taskResponse[0].tips[0].value;
     return alexa.getSSMLResponse(text, false, false);
 };
 
