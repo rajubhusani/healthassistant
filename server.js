@@ -167,7 +167,7 @@ app.post("/alexa", function(req, res) {
             userObj = docs[0];
             console.log(userObj);
             /////CODE ALEXA VOICE
-            if (typeof userObj === undefined) {
+            if (userObj == undefined) {
                 var text = "<speak>You are not a user for health assistant</speak>";
                 var resp = alexa.getSSMLResponse(text, true, false);
                 res.status(200).json(resp);
