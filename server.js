@@ -167,122 +167,127 @@ app.post("/alexa", function(req, res) {
             userObj = docs[0];
             console.log(userObj);
             /////CODE ALEXA VOICE
-
-            if (req.body.request.type === "LaunchRequest") {
-                var resp = alexa.sayHello(userObj.name);
+            if (typeof userObj === undefined) {
+                var text = "<speak>You are not a user for health assistant</speak>";
+                var resp = alexa.getSSMLResponse(text, true, false);
                 res.status(200).json(resp);
-            } else if (req.body.request.type === "IntentRequest") {
-                var intentName = req.body.request.intent.name;
-                console.log("Intent Name:" + intentName);
-                switch (intentName) {
-                    case "SayHello":
-                        var resp = alexa.sayHello(userObj.name);
-                        res.status(200).json(resp);
-                        break;
-                    case "AMAZON.CancelIntent":
-                        var resp = alexa.sayGoodBye();
-                        res.status(200).json(resp);
-                        break;
-                    case "GetTasks":
-                        var date = req.body.request.intent.slots.day.value;
-                        console.log('Date from Alexa: ', date);
-                        var id = userObj._id;
-                        db.collection(COLLECTION.USERS).find({
-                            "_id": id,
-                            "tasks": {
-                                $elemMatch: {
-                                    "date": date
+            } else {
+                if (req.body.request.type === "LaunchRequest") {
+                    var resp = alexa.sayHello(userObj.name);
+                    res.status(200).json(resp);
+                } else if (req.body.request.type === "IntentRequest") {
+                    var intentName = req.body.request.intent.name;
+                    console.log("Intent Name:" + intentName);
+                    switch (intentName) {
+                        case "SayHello":
+                            var resp = alexa.sayHello(userObj.name);
+                            res.status(200).json(resp);
+                            break;
+                        case "AMAZON.CancelIntent":
+                            var resp = alexa.sayGoodBye();
+                            res.status(200).json(resp);
+                            break;
+                        case "GetTasks":
+                            var date = req.body.request.intent.slots.day.value;
+                            console.log('Date from Alexa: ', date);
+                            var id = userObj._id;
+                            db.collection(COLLECTION.USERS).find({
+                                "_id": id,
+                                "tasks": {
+                                    $elemMatch: {
+                                        "date": date
+                                    }
                                 }
-                            }
-                        }, { "tasks.$": 1 }).toArray(function(err, docs) {
-                            if (err) {
-                                handleError(res, err.message, "Error in finding tasks for the user");
-                            } else {
-                                $elemMatch: {
-                                    docs
+                            }, { "tasks.$": 1 }).toArray(function(err, docs) {
+                                if (err) {
+                                    handleError(res, err.message, "Error in finding tasks for the user");
+                                } else {
+                                    $elemMatch: {
+                                        docs
+                                    }
+                                    var resp = alexa.sayTasks(docs);
+                                    res.status(200).json(resp);
                                 }
-                                var resp = alexa.sayTasks(docs);
-                                res.status(200).json(resp);
-                            }
-                        });
-                        break;
+                            });
+                            break;
 
-                    case "ReadHealthData":
-                        var date = req.body.request.intent.slots.day.value; //2017-07-24
-                        var id = userObj._id;
-                        var slotName = req.body.request.intent.slots.measurementType.value; //steps
-                        console.log("Slot:" + slotName + " Date:" + date);
-                        db.collection(COLLECTION.USERS).find({
-                            "_id": id,
-                            "healthdata": {
-                                $elemMatch: {
-                                    "date": date,
-                                    "type": slotName
+                        case "ReadHealthData":
+                            var date = req.body.request.intent.slots.day.value; //2017-07-24
+                            var id = userObj._id;
+                            var slotName = req.body.request.intent.slots.measurementType.value; //steps
+                            console.log("Slot:" + slotName + " Date:" + date);
+                            db.collection(COLLECTION.USERS).find({
+                                "_id": id,
+                                "healthdata": {
+                                    $elemMatch: {
+                                        "date": date,
+                                        "type": slotName
+                                    }
                                 }
-                            }
-                        }, { "healthdata.$": 1 }).toArray(function(err, docs) {
-                            if (err) {
-                                handleError(res, err.message, "You don't have data for " + slotName);
-                            } else {
-                                $elemMatch: {
-                                    docs
+                            }, { "healthdata.$": 1 }).toArray(function(err, docs) {
+                                if (err) {
+                                    handleError(res, err.message, "You don't have data for " + slotName);
+                                } else {
+                                    $elemMatch: {
+                                        docs
+                                    }
+                                    var resp = alexa.readData(docs, slotName);
+                                    res.status(200).json(resp);
                                 }
-                                var resp = alexa.readData(docs, slotName);
-                                res.status(200).json(resp);
-                            }
-                        });
-                        break;
+                            });
+                            break;
 
-                    case "GetTips":
-                        var id = userObj._id;
-                        db.collection(COLLECTION.USERS).find({
-                            "_id": id
-                        }, { "tips": 1 }).toArray(function(err, docs) {
-                            if (err) {
-                                handleError(res, err.message, "You don't have any tips");
-                            } else {
-                                $elemMatch: {
-                                    docs
+                        case "GetTips":
+                            var id = userObj._id;
+                            db.collection(COLLECTION.USERS).find({
+                                "_id": id
+                            }, { "tips": 1 }).toArray(function(err, docs) {
+                                if (err) {
+                                    handleError(res, err.message, "You don't have any tips");
+                                } else {
+                                    $elemMatch: {
+                                        docs
+                                    }
+                                    console.log(docs);
+                                    var resp = alexa.sayTips(docs);
+                                    res.status(200).json(resp);
                                 }
-                                console.log(docs);
-                                var resp = alexa.sayTips(docs);
-                                res.status(200).json(resp);
-                            }
-                        });
-                        break;
-                    default:
-                        var text = "<speak>You can say get tips, get tasks, read health data</speak>";
-                        var resp = alexa.getSSMLResponse(text, false, false);
-                        res.status(200).json(resp);
+                            });
+                            break;
+                        default:
+                            var text = "<speak>You can say get tips, get tasks, read health data</speak>";
+                            var resp = alexa.getSSMLResponse(text, false, false);
+                            res.status(200).json(resp);
 
-                        break;
+                            break;
 
-                        // case "LogHealthData":
-                        //     var date = req.body.request.intent.slots.day.value;
-                        //     var id = "1002";
-                        //     var slotName = req.body.request.intent.slots.measurementType.value;
-                        //     db.collection(COLLECTION.USERS).findOneAndUpdate({
-                        //         "_id": id
-                        //     }, {
-                        //         $addToSet: {
-                        //             "healthdata": {
-                        //                 "type": slotName,
-                        //                 "value": newTask.taskType,
-                        //                 "date": date
-                        //             }
-                        //         }
-                        //     }).then((resp) => {
-                        //         console.log('Task Successfully inserted');
-                        //         res.status(200).json({
-                        //             "success": "Task scheduled successfully"
-                        //         });
-                        //     }, (er) => {
-                        //         handleError(res, er.message, "Schduling task failed, please try again after sometime");
-                        //     });
-                        //     break;
+                            // case "LogHealthData":
+                            //     var date = req.body.request.intent.slots.day.value;
+                            //     var id = "1002";
+                            //     var slotName = req.body.request.intent.slots.measurementType.value;
+                            //     db.collection(COLLECTION.USERS).findOneAndUpdate({
+                            //         "_id": id
+                            //     }, {
+                            //         $addToSet: {
+                            //             "healthdata": {
+                            //                 "type": slotName,
+                            //                 "value": newTask.taskType,
+                            //                 "date": date
+                            //             }
+                            //         }
+                            //     }).then((resp) => {
+                            //         console.log('Task Successfully inserted');
+                            //         res.status(200).json({
+                            //             "success": "Task scheduled successfully"
+                            //         });
+                            //     }, (er) => {
+                            //         handleError(res, er.message, "Schduling task failed, please try again after sometime");
+                            //     });
+                            //     break;
+                    }
                 }
+                ///////END   
             }
-            ///////END
         }
     });
 });
