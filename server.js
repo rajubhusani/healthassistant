@@ -153,7 +153,7 @@ app.updateTips = function(userid, tip) {
 app.post("/alexa", function(req, res) {
     //console.log('Received request from alexa..!' + CircularJSON.stringify(req));
     var alexa_id = req.body.context.System.user.userId;
-    console.log(alexa_id);
+    //console.log(alexa_id);
     var userObj = null;
     db.collection(COLLECTION.USERS).find({
         "alexa_id": alexa_id
